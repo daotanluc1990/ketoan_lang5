@@ -6,6 +6,10 @@
  */
 import { auth, sheets_v4 as sheetsV4 } from '@googleapis/sheets';
 
+// Load .env (tsx không tự load như Next.js)
+import { config as loadEnv } from 'dotenv';
+loadEnv();
+
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 
 // Sheet đang ĐƯỢC code đọc (active) — từ grep SHEET_NAMES trong src/
