@@ -15,7 +15,8 @@
     "static-ui-qa": "node scripts/static-ui-qa.mjs",
     "vercel-build": "next build --webpack",
     "agent-check": "node scripts/check-agent-structure.mjs",
-    "synthetic-data-qa": "tsx scripts/synthetic-data-qa.ts"
+    "synthetic-data-qa": "tsx scripts/synthetic-data-qa.ts",
+    "sheet-audit": "tsx scripts/sheet-audit.ts"
   },
   "dependencies": {
     "@googleapis/sheets": "9.3.0",
