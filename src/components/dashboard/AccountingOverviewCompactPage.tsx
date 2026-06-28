@@ -84,7 +84,7 @@ export function AccountingOverviewCompactPage({ report }: { report: DashboardRep
         </div>
       </section>
 
-      <section className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">{kpiList(report).map((kpi) => <MiniKpi key={kpi.label} label={kpi.label} value={kpi.value} status={kpi.status} trend={kpi.trend} />)}</section>
+      <section className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">{kpiList(report).map((kpi) => <MiniKpi key={kpi.label} label={kpi.label} value={kpi.value} status={kpi.status ?? 'neutral'} trend={kpi.trend} />)}</section>
 
       <section className="grid overflow-hidden rounded-lg border border-lang-line bg-white md:grid-cols-6">{issueStats(report).map(([label, value, tone], index) => <div key={label} className={`flex min-h-[46px] items-center justify-between border-lang-line px-3 py-2 ${index ? 'md:border-l' : ''} ${tone}`}><span className="text-[12px] font-semibold">{label}</span><span className="number text-lg font-black">{value}</span></div>)}</section>
 

@@ -5,6 +5,7 @@ import type { ImportRow } from '@/lib/import/import-types';
 import type { ExcelFileInput, ParsedExcelImport } from './import-parser-types';
 import { cleanHeader, getMonth, getWeekCode, getYear, inferBranch, normalizeChannel, readWorkbook, rowsAsMatrix, sheetToRows, toDateString, toNumber } from './excel-utils';
 import { parseV7ExcelFile } from './v7-parsers';
+import { isKiotVietWasteReport, isKiotVietInventoryReport, isKiotVietDebtReport, parseKiotVietWasteReport, parseKiotVietInventoryReport, parseKiotVietDebtReport } from './kiotviet-parsers';
 
 function makeImportRow(sheetDich: string, keyParts: Array<string | number | undefined | null>, data: Record<string, unknown>, errors: string[] = []): ImportRow {
   const maDongDuLieu = createRecordKey([sheetDich, ...keyParts]);
@@ -430,6 +431,12 @@ function parseFactDataStorageLoss(input: ExcelFileInput, workbook: ReturnType<ty
 }
 
 export function parseExcelFile(input: ExcelFileInput): ParsedExcelImport {
+  // Ưu tiên nhận diện báo cáo KiotViet (merge cells phức tạp) TRƯỚC v7.
+  const { workbook: kvWorkbook, firstSheetName: kvSheetName } = readWorkbook(input.buffer);
+  if (isKiotVietWasteReport(input, kvSheetName)) return parseKiotVietWasteReport(input);
+  if (isKiotVietInventoryReport(input, kvSheetName)) return parseKiotVietInventoryReport(input);
+  if (isKiotVietDebtReport(input, kvSheetName)) return parseKiotVietDebtReport(input);
+
   const v7Parsed = parseV7ExcelFile(input);
   if (v7Parsed) return v7Parsed;
 

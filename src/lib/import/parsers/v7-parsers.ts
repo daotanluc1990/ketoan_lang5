@@ -236,7 +236,7 @@ function rowErrors(row: Record<string, unknown>, target: V7Target, missingHeader
 }
 
 function keyParts(row: Record<string, unknown>, target: V7Target, rowIndex: number) {
-  const parts = target.identityHeaders.map((header) => getValue(row, [header])).filter((value) => String(value ?? '').trim());
+  const parts = target.identityHeaders.map((header) => getValue(row, [header])).filter((value) => String(value ?? '').trim()).map((value) => String(value));
   return parts.length ? parts : [rowIndex];
 }
 

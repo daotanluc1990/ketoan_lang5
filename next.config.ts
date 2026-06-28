@@ -7,12 +7,13 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true
   },
-  eslint: {
-    ignoreDuringBuilds: true
-  },
   experimental: {
     cpus: 1
   }
 };
+
+// eslint.ignoreDuringBuilds không thuộc type NextConfig chuẩn nhưng Next hỗ trợ.
+// Gán runtime để tránh TS error mà vẫn giữ behavior.
+Object.assign(nextConfig, { eslint: { ignoreDuringBuilds: true } });
 
 export default nextConfig;
