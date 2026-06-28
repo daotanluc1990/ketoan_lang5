@@ -4,7 +4,7 @@
  *
  * Chạy: npm run sheet-audit
  */
-import { google } from 'googleapis';
+import { auth, sheets_v4 as sheetsV4 } from '@googleapis/sheets';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 
@@ -38,10 +38,10 @@ async function main() {
     console.error('❌ Thiếu GOOGLE_SHEET_ID / GOOGLE_CLIENT_EMAIL / GOOGLE_PRIVATE_KEY trong .env');
     process.exit(1);
   }
-  const jwt = new google.auth.JWT(clientEmail, undefined, privateKey, SCOPES);
-  const sheets = google.sheets({ version: 'v4', auth: jwt });
+  const jwt = new auth.JWT(clientEmail, undefined, privateKey, SCOPES);
+  const sheets = new sheetsV4.Sheets({ auth: jwt });
   const meta = await sheets.spreadsheets.get({ spreadsheetId: sheetId });
-  const tabNames = meta.data.sheets?.map((s) => s.properties?.title).filter(Boolean) as string[];
+  const tabNames = (meta.data.sheets ?? []).map((s) => s.properties?.title ?? '').filter(Boolean);
 
   console.log(`\n📊 Google Sheet có ${tabNames.length} tab:\n`);
   console.log('═'.repeat(70));
