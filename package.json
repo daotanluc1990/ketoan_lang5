@@ -16,7 +16,8 @@
     "vercel-build": "next build --webpack",
     "agent-check": "node scripts/check-agent-structure.mjs",
     "synthetic-data-qa": "tsx scripts/synthetic-data-qa.ts",
-    "sheet-audit": "tsx scripts/sheet-audit.ts"
+    "sheet-audit": "tsx scripts/sheet-audit.ts",
+    "sheet-cleanup": "tsx scripts/sheet-cleanup.ts"
   },
   "dependencies": {
     "@googleapis/sheets": "9.3.0",
@@ -30,6 +31,7 @@
     "zod": "3.24.1"
   },
   "devDependencies": {
+    "@googleapis/drive": "^20.2.0",
     "@types/node": "22.10.2",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
@@ -37,6 +39,8 @@
     "dotenv": "^17.4.2",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.9",
+    "google-auth-library": "^10.9.0",
+    "googleapis": "^173.0.0",
     "postcss": "8.4.49",
     "tailwindcss": "3.4.17",
     "tsx": "4.19.2",
