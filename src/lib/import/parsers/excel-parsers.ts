@@ -437,13 +437,17 @@ export function parseExcelFile(input: ExcelFileInput): ParsedExcelImport {
   if (isKiotVietInventoryReport(input, kvSheetName)) return parseKiotVietInventoryReport(input);
   if (isKiotVietDebtReport(input, kvSheetName)) return parseKiotVietDebtReport(input);
 
+  // Sổ quỹ KiotViet: filename có 'soquy' HOẶC header có Mã phiếu + Loại thu chi.
+  // Phải chạy TRƯỚC v7 vì v7 có thể match nhầm header SoQuy sang XNT cửa hàng.
+  const kvMatrix = rowsAsMatrix(kvWorkbook.Sheets[kvSheetName]);
+  if (looksLikeCashbook(input.filename, kvMatrix)) return parseCashbookFile(input);
+
   const v7Parsed = parseV7ExcelFile(input);
   if (v7Parsed) return v7Parsed;
 
   const { workbook, firstSheet } = readWorkbook(input.buffer);
   const matrix = rowsAsMatrix(firstSheet);
   if (looksLikeStoreRevenue(input.filename, matrix)) return parseStoreRevenueFile(input);
-  if (looksLikeCashbook(input.filename, matrix)) return parseCashbookFile(input);
   if (looksLikeInventory(input.filename, matrix)) return parseInventoryFile(input);
   if (looksLikeAppRevenue(input.filename, matrix)) return parseAppRevenueFile(input);
   if (looksLikeLossReport(input.filename, workbook.SheetNames, matrix)) return parseLossReportFile(input);
