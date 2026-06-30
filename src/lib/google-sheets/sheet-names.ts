@@ -39,18 +39,19 @@ export const SHEET_NAMES = {
   BAN_LAM_VIEC_KE_TOAN: 'BAN_LAM_VIEC_KE_TOAN',
 
   IMPORT_LICH_SU: 'IMPORT_LICH_SU',
-  IMPORT_DONG_LOI: 'IMPORT_DONG_LOI',
-  IMPORT_DU_LIEU_TRUNG: 'IMPORT_DU_LIEU_TRUNG',
-  IMPORT_DU_LIEU_LECH: 'IMPORT_DU_LIEU_LECH',
+  IMPORT_DONG_LOI: 'IMPORT_LICH_SU',
+  IMPORT_DU_LIEU_TRUNG: 'IMPORT_LICH_SU',
+  IMPORT_DU_LIEU_LECH: 'IMPORT_LICH_SU',
   AUDIT_LOG: 'AUDIT_LOG',
-  CAI_DAT_BOT: 'CAI_DAT_BOT',
-  CAI_DAT_NGUONG: 'CAI_DAT_NGUONG',
+  CAI_DAT_BOT: 'CAI_DAT',
+  CAI_DAT_NGUONG: 'CAI_DAT',
+  CAI_DAT: 'CAI_DAT',
 
   // Backward-compatible aliases for older code paths. They intentionally map to
   // the V7 Data Master sheet names so production does not write to missing tabs.
   IMPORT_NHAT_KY_XU_LY: 'AUDIT_LOG',
-  CAI_DAT_NGUONG_CANH_BAO: 'CAI_DAT_NGUONG',
-  CAI_DAT_BOT_BAO_CAO: 'CAI_DAT_BOT'
+  CAI_DAT_NGUONG_CANH_BAO: 'CAI_DAT',
+  CAI_DAT_BOT_BAO_CAO: 'CAI_DAT'
 } as const;
 
 export type SheetName = (typeof SHEET_NAMES)[keyof typeof SHEET_NAMES];

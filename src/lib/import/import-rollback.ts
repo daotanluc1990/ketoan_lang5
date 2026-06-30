@@ -91,6 +91,7 @@ export async function rollbackImport(input: RollbackInput) {
 
   await store.append(SHEET_NAMES.IMPORT_LICH_SU, [
     {
+      'Loại sự kiện': 'IMPORT_ROLLBACK',
       'Mã lần import': input.maLanImport,
       'Ngày import': new Date().toISOString(),
       'Người import': input.actor,

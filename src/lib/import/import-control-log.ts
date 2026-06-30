@@ -2,6 +2,13 @@ import { getDataStore } from '@/lib/data-store';
 import { SHEET_NAMES } from '@/lib/google-sheets/sheet-names';
 import type { ImportPreviewResult, ImportRow } from './import-types';
 
+/**
+ * Ghi log dòng lỗi/trùng/lệch vào IMPORT_LICH_SU với cột `Loại sự kiện`.
+ *
+ * Trước đây 3 loại ghi vào 3 sheet riêng: IMPORT_DONG_LOI/TRUNG/LECH.
+ * GĐ-C Phase 2: gộp về IMPORT_LICH_SU, phân biệt bằng `Loại sự kiện`.
+ */
+
 function safeJson(value: unknown) {
   try {
     return JSON.stringify(value).slice(0, 5000);
@@ -27,51 +34,68 @@ export async function writeImportControlLogs(preview: ImportPreviewResult) {
   const duplicateRows = preview.rows.filter((row) => row.status === 'Dữ liệu trùng');
   const mismatchRows = preview.rows.filter((row) => row.status === 'Dữ liệu lệch');
 
-  if (errorRows.length) {
-    await store.append(SHEET_NAMES.IMPORT_DONG_LOI, errorRows.map((row, index) => {
-      const detail = getFieldError(row);
-      return {
-        'Mã lỗi': `${preview.maLanImport}-ERR-${index + 1}`,
-        'Mã lần import': preview.maLanImport,
-        'Tên file': preview.tenFile,
-        'Dòng nguồn': rowSource(row),
-        'Sheet nguồn': row.sheetDich,
-        'Trường lỗi': detail.field,
-        'Giá trị lỗi': '',
-        'Mô tả lỗi': detail.message,
-        'Mức độ': 'Chặn ghi',
-        'Cách xử lý': 'Sửa file nguồn hoặc loại dòng lỗi rồi preview lại.',
-        'Trạng thái': 'Chờ xử lý'
-      };
-    }));
-  }
+  const logRows: Array<Record<string, unknown>> = [];
 
-  if (duplicateRows.length) {
-    await store.append(SHEET_NAMES.IMPORT_DU_LIEU_TRUNG, duplicateRows.map((row, index) => ({
-      'Mã trùng': `${preview.maLanImport}-DUP-${index + 1}`,
-      'Mã lần import': preview.maLanImport,
-      'Tên file': preview.tenFile,
-      'Dòng nguồn': rowSource(row),
-      'Khóa dữ liệu': row.maDongDuLieu,
-      'Dữ liệu hiện có': row.dauVetDong,
-      'Dữ liệu mới': safeJson(row.data),
-      'Hành động': 'Bỏ qua khi confirm'
-    })));
-  }
+  // Dòng lỗi → IMPORT_LICH_SU với loại sự kiện 'DÒNG_LỖI'
+  errorRows.forEach((row, index) => {
+    const detail = getFieldError(row);
+    logRows.push({
+      'Loại sự kiện': 'DÒNG_LỖI',
+      'Mã lần import': `${preview.maLanImport}-ERR-${index + 1}`,
+      'Ngày import': now,
+      'Người import': '',
+      'Chi nhánh': preview.chiNhanh,
+      'Tuần': '',
+      'Số file': 1,
+      'Tổng dòng mới': 0,
+      'Tổng dòng trùng': 0,
+      'Tổng dòng lệch': 0,
+      'Tổng dòng lỗi': 1,
+      'Trạng thái': 'Chờ xử lý',
+      'Ghi chú': `${preview.tenFile} | Dòng: ${rowSource(row)} | Sheet: ${row.sheetDich} | Trường: ${detail.field} | Lỗi: ${detail.message} | Xử lý: Sửa file nguồn rồi preview lại`
+    });
+  });
 
-  if (mismatchRows.length) {
-    await store.append(SHEET_NAMES.IMPORT_DU_LIEU_LECH, mismatchRows.map((row, index) => ({
-      'Mã lệch': `${preview.maLanImport}-DIFF-${index + 1}`,
-      'Mã lần import': preview.maLanImport,
-      'Tên file': preview.tenFile,
-      'Khóa dữ liệu': row.maDongDuLieu,
-      'Chỉ số lệch': 'Dấu vết dòng',
-      'Giá trị cũ': 'Đã có dữ liệu cùng khóa nhưng khác dấu vết',
-      'Giá trị mới': row.dauVetDong,
-      'Chênh lệch': safeJson(row.data),
-      'Người xử lý': '',
-      'Trạng thái': 'Chờ đối chiếu'
-    })));
+  // Dữ liệu trùng → IMPORT_LICH_SU với loại sự kiện 'DỮ_LIỆU_TRÙNG'
+  duplicateRows.forEach((row, index) => {
+    logRows.push({
+      'Loại sự kiện': 'DỮ_LIỆU_TRÙNG',
+      'Mã lần import': `${preview.maLanImport}-DUP-${index + 1}`,
+      'Ngày import': now,
+      'Người import': '',
+      'Chi nhánh': preview.chiNhanh,
+      'Tuần': '',
+      'Số file': 1,
+      'Tổng dòng mới': 0,
+      'Tổng dòng trùng': 1,
+      'Tổng dòng lệch': 0,
+      'Tổng dòng lỗi': 0,
+      'Trạng thái': 'Bỏ qua khi confirm',
+      'Ghi chú': `${preview.tenFile} | Dòng: ${rowSource(row)} | Khóa: ${row.maDongDuLieu} | Cũ: ${row.dauVetDong} | Mới: ${safeJson(row.data).slice(0, 500)}`
+    });
+  });
+
+  // Dữ liệu lệch → IMPORT_LICH_SU với loại sự kiện 'DỮ_LIỆU_LỆCH'
+  mismatchRows.forEach((row, index) => {
+    logRows.push({
+      'Loại sự kiện': 'DỮ_LIỆU_LỆCH',
+      'Mã lần import': `${preview.maLanImport}-DIFF-${index + 1}`,
+      'Ngày import': now,
+      'Người import': '',
+      'Chi nhánh': preview.chiNhanh,
+      'Tuần': '',
+      'Số file': 1,
+      'Tổng dòng mới': 0,
+      'Tổng dòng trùng': 0,
+      'Tổng dòng lệch': 1,
+      'Tổng dòng lỗi': 0,
+      'Trạng thái': 'Chờ đối chiếu',
+      'Ghi chú': `${preview.tenFile} | Khóa: ${row.maDongDuLieu} | Cũ: Đã có dữ liệu cùng khóa khác dấu vết | Mới: ${row.dauVetDong} | Chênh: ${safeJson(row.data).slice(0, 500)}`
+    });
+  });
+
+  if (logRows.length) {
+    await store.append(SHEET_NAMES.IMPORT_LICH_SU, logRows);
   }
 
   return {

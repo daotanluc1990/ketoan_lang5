@@ -21,6 +21,7 @@ function importStatus(preview: ImportPreviewResult, writtenRows: number) {
 async function appendImportHistory(preview: ImportPreviewResult, actor: string, status: string, note: string) {
   await getDataStore().append(SHEET_NAMES.IMPORT_LICH_SU, [
     {
+      'Loại sự kiện': 'IMPORT_CONFIRM',
       'Mã lần import': preview.maLanImport,
       'Ngày import': new Date().toISOString(),
       'Người import': actor,

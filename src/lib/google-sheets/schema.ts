@@ -73,23 +73,8 @@ export const GOOGLE_SHEETS_SCHEMA: SheetSchema[] = [
   },
   {
     sheetName: 'IMPORT_LICH_SU',
-    description: 'Lịch sử import batch/file.',
-    columns: ['Mã lần import', 'Ngày import', 'Người import', 'Chi nhánh', 'Tuần', 'Số file', 'Tổng dòng mới', 'Tổng dòng trùng', 'Tổng dòng lệch', 'Tổng dòng lỗi', 'Trạng thái', 'Ghi chú']
-  },
-  {
-    sheetName: 'IMPORT_DONG_LOI',
-    description: 'Dòng lỗi khi preview/import.',
-    columns: ['Mã lỗi', 'Mã lần import', 'Tên file', 'Dòng nguồn', 'Sheet nguồn', 'Trường lỗi', 'Giá trị lỗi', 'Mô tả lỗi', 'Mức độ', 'Cách xử lý', 'Trạng thái']
-  },
-  {
-    sheetName: 'IMPORT_DU_LIEU_TRUNG',
-    description: 'Dữ liệu trùng khi preview/import.',
-    columns: ['Mã trùng', 'Mã lần import', 'Tên file', 'Dòng nguồn', 'Khóa dữ liệu', 'Dữ liệu hiện có', 'Dữ liệu mới', 'Hành động']
-  },
-  {
-    sheetName: 'IMPORT_DU_LIEU_LECH',
-    description: 'Dữ liệu lệch khi preview/import.',
-    columns: ['Mã lệch', 'Mã lần import', 'Tên file', 'Khóa dữ liệu', 'Chỉ số lệch', 'Giá trị cũ', 'Giá trị mới', 'Chênh lệch', 'Người xử lý', 'Trạng thái']
+    description: 'Lịch sử import + tracking dòng lỗi/trùng/lệch (gộp từ IMPORT_DONG_LOI/TRUNG/LECH).',
+    columns: ['Loại sự kiện', 'Mã lần import', 'Ngày import', 'Người import', 'Chi nhánh', 'Tuần', 'Số file', 'Tổng dòng mới', 'Tổng dòng trùng', 'Tổng dòng lệch', 'Tổng dòng lỗi', 'Trạng thái', 'Ghi chú']
   },
 
   {
@@ -98,13 +83,8 @@ export const GOOGLE_SHEETS_SCHEMA: SheetSchema[] = [
     columns: ['ID', 'Thời gian', 'Người dùng', 'Vai trò', 'Hành động', 'Đối tượng', 'Trước', 'Sau', 'Ghi chú', 'IP/Thiết bị']
   },
   {
-    sheetName: 'CAI_DAT_BOT',
-    description: 'Cài đặt bot báo cáo, không lưu secret thật.',
-    columns: ['Cấu hình', 'Giá trị', 'Ghi chú', 'Trạng thái']
-  },
-  {
-    sheetName: 'CAI_DAT_NGUONG',
-    description: 'Cài đặt ngưỡng cảnh báo.',
-    columns: ['Chỉ số', 'Tốt', 'Cảnh báo', 'Nguy hiểm', 'Đơn vị', 'Áp dụng cho', 'Ghi chú']
+    sheetName: 'CAI_DAT',
+    description: 'Cài đặt hệ thống: ngưỡng cảnh báo + bot báo cáo (gộp từ CAI_DAT_BOT + CAI_DAT_NGUONG).',
+    columns: ['Loại cài đặt', 'Chỉ số', 'Tốt', 'Cảnh báo', 'Nguy hiểm', 'Đơn vị', 'Giá trị', 'Áp dụng cho', 'Ghi chú', 'Trạng thái']
   }
 ];
