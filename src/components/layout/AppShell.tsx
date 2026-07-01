@@ -3,6 +3,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { clsx } from 'clsx';
 import { Sidebar } from './Sidebar';
+import { RagAssistant } from '@/components/dashboard/RagAssistant';
 import { TopBar } from './TopBar';
 import { GlobalFilterBar } from './GlobalFilterBar';
 import type { Role } from '@/lib/report-types';
@@ -102,6 +103,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </main>
       </div>
+      <RagAssistant />
     </div>
   );
 }
