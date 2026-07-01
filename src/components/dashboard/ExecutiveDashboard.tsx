@@ -64,11 +64,11 @@ export function ExecutiveDashboard({ report }: { report: V7Report }) {
       {/* KHỐI 2 + 3: Cảnh báo đỏ + Việc cần làm */}
       <section className="grid gap-4 xl:grid-cols-2">
         <Card>
-          <CardTitle className="flex items-center gap-2">
+          <div className="mb-3 flex items-center gap-2">
             <AlertTriangle className="h-4 w-4 text-lang-red" />
-            Cảnh báo đỏ
+            <CardTitle>Cảnh báo đỏ</CardTitle>
             <StatusBadge status={redAlerts.length ? 'Cảnh báo' : 'Tốt'} />
-          </CardTitle>
+          </div>
           <div className="mt-3">
             {redAlerts.length ? (
               <ReportTable headers={report.issues.headers} rows={redAlerts} maxHeight="max-h-[260px]" />
@@ -82,11 +82,11 @@ export function ExecutiveDashboard({ report }: { report: V7Report }) {
         </Card>
 
         <Card>
-          <CardTitle className="flex items-center gap-2">
+          <div className="mb-3 flex items-center gap-2">
             <ClipboardList className="h-4 w-4 text-lang-redDark" />
-            Việc cần làm hôm nay
+            <CardTitle>Việc cần làm hôm nay</CardTitle>
             <StatusBadge status="Cảnh báo" />
-          </CardTitle>
+          </div>
           <div className="mt-3">
             <ReportTable headers={['Việc', 'Người phụ trách', 'Hạn', 'Trạng thái', 'Mức độ']} rows={tasks} maxHeight="max-h-[260px]" />
           </div>
@@ -95,10 +95,10 @@ export function ExecutiveDashboard({ report }: { report: V7Report }) {
 
       {/* KHỐI 4: Báo cáo đến hạn */}
       <Card>
-        <CardTitle className="flex items-center gap-2">
+        <div className="mb-3 flex items-center gap-2">
           <FileText className="h-4 w-4 text-lang-redDark" />
-          Báo cáo đến hạn
-        </CardTitle>
+          <CardTitle>Báo cáo đến hạn</CardTitle>
+        </div>
         <div className="mt-3">
           <ReportTable headers={['Báo cáo', 'Tần suất', 'Người phụ trách', 'Trạng thái']} rows={reports} maxHeight="max-h-[200px]" />
         </div>
@@ -122,10 +122,10 @@ export function ExecutiveDashboard({ report }: { report: V7Report }) {
 
       {/* KHỐI 6: Tài liệu liên quan */}
       <Card>
-        <CardTitle className="flex items-center gap-2">
+        <div className="mb-3 flex items-center gap-2">
           <BookOpen className="h-4 w-4 text-lang-redDark" />
-          Tài liệu liên quan
-        </CardTitle>
+          <CardTitle>Tài liệu liên quan</CardTitle>
+        </div>
         <div className="mt-3 grid gap-3 md:grid-cols-3">
           {docs.map((doc) => (
             <Link key={doc.title} href={doc.href} className="block rounded-lg border border-lang-line p-3 transition hover:border-lang-red hover:bg-lang-redSoft">
