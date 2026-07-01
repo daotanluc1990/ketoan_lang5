@@ -22,7 +22,7 @@ body {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  /* Compact base font — all components inherit this density */
+  /* Density gốc — không ép !important nữa, Tailwind config lo spacing */
   font-size: 13px;
 }
 
@@ -40,94 +40,35 @@ button, input, select, textarea { font: inherit; }
 }
 
 /* ============================================================
-   COMPACT DENSITY OVERRIDES
-   Dashboard dùng density compact hơn mặc định Tailwind để vừa
-   1-2 viewport. Tạm giữ !important vì 24 components đang dựa vào
-   density này. GĐ refactor sau sẽ migrate sang class compact
-   tường minh (.compact-card, .table-scroll) rồi bỏ khối này.
-
-   LƯU Ý: KHÔNG thêm class mới vào đây — dùng @layer components
-   bên dưới cho component class sạch.
+   FOCUS INDICATORS (Option A — a11y fix)
+   Mọi interactive element có focus ring rõ ràng khi keyboard nav.
    ============================================================ */
-
-/* Spacing */
-.space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem !important; }
-.space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.625rem !important; }
-.gap-4 { gap: 0.75rem !important; }
-.gap-3 { gap: 0.625rem !important; }
-.gap-2 { gap: 0.45rem !important; }
-.p-5 { padding: 1rem !important; }
-.p-4 { padding: 0.75rem !important; }
-.p-3 { padding: 0.625rem !important; }
-.px-6 { padding-left: 1rem !important; padding-right: 1rem !important; }
-.px-5 { padding-left: 0.875rem !important; padding-right: 0.875rem !important; }
-.px-4 { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
-.px-3 { padding-left: 0.625rem !important; padding-right: 0.625rem !important; }
-.py-4 { padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; }
-.py-3 { padding-top: 0.625rem !important; padding-bottom: 0.625rem !important; }
-.py-2\.5 { padding-top: 0.45rem !important; padding-bottom: 0.45rem !important; }
-.py-2 { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
-.mt-4 { margin-top: 0.75rem !important; }
-.mt-3 { margin-top: 0.625rem !important; }
-.mt-2 { margin-top: 0.4rem !important; }
-.mb-4 { margin-bottom: 0.75rem !important; }
-.mb-3 { margin-bottom: 0.625rem !important; }
-
-/* Radius (enterprise gọn hơn) */
-.rounded-3xl { border-radius: 1rem !important; }
-.rounded-2xl { border-radius: 0.75rem !important; }
-.rounded-xl { border-radius: 0.7rem !important; }
-
-/* Shadow (mỏng, sạch) */
-.shadow-card, .shadow-soft { box-shadow: 0 5px 16px rgba(17, 24, 39, 0.05) !important; }
-
-/* Typography scale (compact) */
-.text-4xl { font-size: 1.7rem !important; line-height: 2rem !important; }
-.text-3xl { font-size: 1.5rem !important; line-height: 1.85rem !important; }
-.text-2xl { font-size: 1.28rem !important; line-height: 1.6rem !important; }
-.text-xl { font-size: 1.1rem !important; line-height: 1.35rem !important; }
-.text-lg { font-size: 1rem !important; line-height: 1.3rem !important; }
-.text-base { font-size: 0.92rem !important; line-height: 1.25rem !important; }
-.text-sm { font-size: 0.8rem !important; line-height: 1.15rem !important; }
-
-/* Heights/widths (compact) */
-.h-11 { height: 2.25rem !important; }
-.h-10 { height: 2.1rem !important; }
-.h-9 { height: 1.95rem !important; }
-.h-8 { height: 1.75rem !important; }
-.w-11 { width: 2.25rem !important; }
-.w-10 { width: 2.1rem !important; }
-.w-9 { width: 1.95rem !important; }
-.w-8 { width: 1.75rem !important; }
-
-/* Min/max heights cho bảng có scroll */
-.min-h-\[72px\] { min-height: 52px !important; }
-.max-h-\[380px\] { max-height: 290px !important; }
-.max-h-\[360px\] { max-height: 280px !important; }
-.max-h-\[320px\] { max-height: 250px !important; }
-.max-h-\[300px\] { max-height: 230px !important; }
-.max-h-\[260px\] { max-height: 210px !important; }
-.max-h-\[240px\] { max-height: 190px !important; }
-.max-h-\[210px\] { max-height: 165px !important; }
-
-/* Layout container */
-.lg\:px-6 { padding-left: 1rem !important; padding-right: 1rem !important; }
-.lg\:px-7 { padding-left: 1rem !important; padding-right: 1rem !important; }
-.lg\:pl-60 { padding-left: 14rem !important; }
-.lg\:pl-\[72px\] { padding-left: 64px !important; }
-.max-w-\[1480px\] { max-width: 1400px !important; }
+@layer base {
+  *:focus-visible {
+    outline: 2px solid var(--brand-red);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  /* Không phá styling nút primary khi focus */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--brand-red);
+    outline-offset: 2px;
+  }
+}
 
 /* ============================================================
    COMPONENT LAYER (class sạch, không !important)
-   Dùng cho UI mới: sticky table header, breadcrumbs, sparkline,
-   empty state. Component class này có thể override density ngầm.
    ============================================================ */
 @layer components {
-  /* Table scroll — sticky header + freeze first column + overflow */
+  /* Table scroll — sticky header + freeze first column */
   .table-scroll-sticky {
     overflow: auto;
     max-height: 420px;
-    border-radius: 0.75rem;
+    border-radius: 8px;
     border: 1px solid var(--brand-line);
     background: #fff;
   }
@@ -152,8 +93,8 @@ button, input, select, textarea { font: inherit; }
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 11px;
-    color: #6B7280;
+    font-size: 12px;
+    color: #4B5563;
     margin-bottom: 2px;
   }
   .breadcrumbs .crumb-sep { opacity: 0.5; }
@@ -176,14 +117,14 @@ button, input, select, textarea { font: inherit; }
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
-    color: #6B7280;
+    padding: 48px 24px;
+    color: #4B5563;
     text-align: center;
     gap: 8px;
   }
   .empty-state .es-icon { font-size: 32px; opacity: 0.4; }
-  .empty-state .es-text { font-size: 13px; font-weight: 600; }
-  .empty-state .es-hint { font-size: 11px; }
+  .empty-state .es-text { font-size: 14px; font-weight: 600; }
+  .empty-state .es-hint { font-size: 12px; }
 }
 
 /* Scrollbar styling */
@@ -204,4 +145,13 @@ button, input, select, textarea { font: inherit; }
 
 @media (max-height: 780px) {
   .sidebar-foot { display: none; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

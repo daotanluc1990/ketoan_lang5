@@ -73,6 +73,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
+  // Close mobile drawer on Escape
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileOpen(false); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [mobileOpen]);
+
   const contentPadding = useMemo(() => (collapsed ? 'lg:pl-[72px]' : 'lg:pl-60'), [collapsed]);
 
   return (
@@ -88,7 +96,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             onClick={() => setMobileOpen(false)}
             aria-hidden="true"
           />
-          <div className="fixed inset-y-0 left-0 z-50 w-60 lg:hidden">
+          <div className="fixed inset-y-0 left-0 z-50 w-60 lg:hidden" role="dialog" aria-modal="true" aria-label="Menu điều hướng">
             <Sidebar collapsed={false} onToggle={() => setMobileOpen(false)} role={role} onNavigate={() => setMobileOpen(false)} />
           </div>
         </>
