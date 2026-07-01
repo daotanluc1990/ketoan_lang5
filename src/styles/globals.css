@@ -155,3 +155,32 @@ button, input, select, textarea { font: inherit; }
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   DARK MODE (Option A)
+   Kế toán dùng ban đêm — toggle qua Moon/Sun icon trong TopBar.
+   ============================================================ */
+.dark {
+  --background: #0F1117;
+  --foreground: #E5E7EB;
+  --brand-line: #2A2D3A;
+  color-scheme: dark;
+}
+.dark body { background: #0F1117; color: #E5E7EB; }
+.dark .app-bg { background: #0F1117; }
+.dark aside { background: #1A1D29; border-color: #2A2D3A; }
+.dark .glass-surface { background: #1A1D29; border-color: #2A2D3A; box-shadow: 0 4px 12px rgba(0,0,0,.3); }
+.dark .bg-white { background-color: #1A1D29; }
+.dark .border-lang-line { border-color: #2A2D3A; }
+.dark .text-lang-ink { color: #E5E7EB; }
+.dark .text-lang-muted { color: #9CA3AF; }
+.dark .hover\:bg-gray-50:hover { background-color: #2A2D3A; }
+.dark .hover\:bg-lang-redSoft:hover { background-color: rgba(201,0,19,.15); }
+.dark .bg-lang-redSoft { background-color: rgba(201,0,19,.12); }
+.dark .bg-gray-50 { background-color: #2A2D3A; }
+.dark .bg-\[\#FAFBFC\] { background-color: #161821; }
+.dark table th { background: #161821; color: #9CA3AF; }
+.dark table tr:hover td { background: #1F2230; }
+.dark input { background: #161821; color: #E5E7EB; }
+.dark select { background: #161821; color: #E5E7EB; }
+.dark select option { background: #1A1D29; color: #E5E7EB; }

@@ -6,13 +6,34 @@ import { useMemo, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import type { Role } from '@/lib/report-types';
 import { navigationItems } from './navigation';
-import { Bell, HelpCircle, Menu, Search, Send, UserRound } from 'lucide-react';
+import { Bell, HelpCircle, Menu, Moon, Search, Send, Sun, UserRound } from 'lucide-react';
 
 const roles: Role[] = ['CEO', 'Kế toán', 'Admin', 'Quản lý cửa hàng'];
 
 export function TopBar({ role, onRoleChange, onMobileMenu }: { role: Role; onRoleChange: (role: Role) => void; onMobileMenu?: () => void }) {
   const router = useRouter();
   const [query, setQuery] = useState('');
+
+  // Dark mode toggle
+  const [dark, setDark] = useState(false);
+  const toggleDark = () => {
+    const next = !dark;
+    setDark(next);
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('dark', next);
+      try { localStorage.setItem('erp-dark', next ? '1' : '0'); } catch {}
+    }
+  };
+  // Restore dark mode on mount
+  useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('erp-dark') === '1';
+        if (saved) { setDark(true); document.documentElement.classList.add('dark'); }
+      } catch {}
+    }
+    return null;
+  });
 
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -74,6 +95,7 @@ export function TopBar({ role, onRoleChange, onMobileMenu }: { role: Role; onRol
         <div className="flex items-center gap-2">
           <Link href="/import-nhap-lieu" className="hidden h-10 items-center gap-2 rounded-lg bg-white px-3 text-sm font-bold text-lang-red shadow-sm hover:bg-gray-50 md:inline-flex">Import</Link>
           <Link href="/cai-dat-bot" className="hidden h-10 items-center gap-1.5 rounded-lg bg-white/15 px-3 text-sm font-bold text-white ring-1 ring-white/25 hover:bg-white/20 md:inline-flex"><Send className="h-4 w-4" />CEO/Bot</Link>
+          <button onClick={toggleDark} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-white hover:bg-white/15" aria-label={dark ? 'Chuyển sáng' : 'Chuyển tối'}>{dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}</button>
           <button className="relative inline-flex h-11 w-11 items-center justify-center rounded-lg text-white hover:bg-white/15" aria-label="Thông báo"><Bell className="h-4 w-4" /><span className="absolute right-1.5 top-1.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-white px-1 text-xs font-bold text-lang-red">3</span></button>
           <button className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-white hover:bg-white/15" aria-label="Trợ giúp"><HelpCircle className="h-4 w-4" /></button>
           <div className="ml-1 flex items-center gap-2 border-l border-white/20 pl-3">
