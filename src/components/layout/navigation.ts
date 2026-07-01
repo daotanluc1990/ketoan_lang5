@@ -1,13 +1,17 @@
-import { BarChart3, Bot, BriefcaseBusiness, ClipboardList, DollarSign, FileInput, Home, Scale, ShieldAlert } from 'lucide-react';
+import { BarChart3, BookOpen, Bot, BriefcaseBusiness, Building2, ClipboardList, DollarSign, FileInput, Home, Scale, ShieldAlert, Users, Wallet, ChefHat, Package, Trash2, TrendingUp, CalendarDays, FileText, AlertTriangle, FileSpreadsheet, Settings, Store, Lock } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { Permission } from '@/lib/rbac/rbac';
 import type { Role } from '@/lib/report-types';
 
 export type NavigationGroup =
-  | 'Tổng quan & xử lý'
-  | 'Báo cáo tài chính quản trị'
-  | 'Kho & vận hành hàng hóa'
-  | 'Thất thoát & định mức'
+  | 'Trang chủ'
+  | 'Doanh thu'
+  | 'Kho cửa hàng'
+  | 'Kho bếp trung tâm'
+  | 'Tài chính'
+  | 'Lương & nhân sự'
+  | 'Báo cáo quản trị'
+  | 'Tài liệu'
   | 'Hệ thống';
 
 export type NavigationItem = {
@@ -23,33 +27,59 @@ const FULL_FINANCE_ROLES: Role[] = ['CEO', 'Kế toán', 'Admin'];
 const OPERATION_ROLES: Role[] = ['CEO', 'Kế toán', 'Admin', 'Quản lý cửa hàng'];
 
 export const navigationItems: NavigationItem[] = [
-  { href: '/tong-quan', label: 'Tổng quan kế toán', icon: Home, group: 'Tổng quan & xử lý', permission: 'view_dashboard', allowedRoles: OPERATION_ROLES },
-  { href: '/ban-lam-viec-ke-toan', label: 'Bàn làm việc kế toán', icon: BriefcaseBusiness, group: 'Tổng quan & xử lý', permission: 'view_workbench', allowedRoles: OPERATION_ROLES },
-  { href: '/import-nhap-lieu', label: 'Nhập liệu & Import', icon: FileInput, group: 'Tổng quan & xử lý', permission: 'view_import', allowedRoles: FULL_FINANCE_ROLES },
+  // TRANG CHỦ
+  { href: '/trang-chu', label: 'Trang chủ', icon: Home, group: 'Trang chủ', permission: 'view_dashboard', allowedRoles: OPERATION_ROLES },
 
-  { href: '/pl-tuan', label: 'P&L Tuần', icon: BarChart3, group: 'Báo cáo tài chính quản trị', permission: 'view_pnl', allowedRoles: FULL_FINANCE_ROLES },
-  { href: '/dong-tien', label: 'Dòng tiền Tuần', icon: DollarSign, group: 'Báo cáo tài chính quản trị', permission: 'view_cashflow', allowedRoles: OPERATION_ROLES },
-  { href: '/can-doi', label: 'Cân đối rút gọn', icon: Scale, group: 'Báo cáo tài chính quản trị', permission: 'view_balance', allowedRoles: FULL_FINANCE_ROLES },
-  { href: '/du-toan', label: 'Dự toán tuần tới', icon: ClipboardList, group: 'Báo cáo tài chính quản trị', permission: 'view_forecast', allowedRoles: FULL_FINANCE_ROLES },
+  // DOANH THU
+  { href: '/doanh-thu/tien-mat', label: 'Tiền mặt', icon: Wallet, group: 'Doanh thu', permission: 'view_dashboard', allowedRoles: OPERATION_ROLES },
+  { href: '/doanh-thu/chuyen-khoan', label: 'Chuyển khoản', icon: DollarSign, group: 'Doanh thu', permission: 'view_dashboard', allowedRoles: OPERATION_ROLES },
+  { href: '/doanh-thu/app', label: 'App giao hàng', icon: TrendingUp, group: 'Doanh thu', permission: 'view_dashboard', allowedRoles: OPERATION_ROLES },
 
-  { href: '/kho-cua-hang', label: 'Kho cửa hàng', icon: ClipboardList, group: 'Kho & vận hành hàng hóa', permission: 'view_inventory', allowedRoles: OPERATION_ROLES },
-  { href: '/kho-bep-trung-tam', label: 'Kho Bếp Trung Tâm', icon: ClipboardList, group: 'Kho & vận hành hàng hóa', permission: 'view_btt_inventory', allowedRoles: OPERATION_ROLES },
-  { href: '/doi-chieu-btt-cua-hang', label: 'Đối chiếu BTT - Cửa hàng', icon: Scale, group: 'Kho & vận hành hàng hóa', permission: 'view_transfer', allowedRoles: OPERATION_ROLES },
-  { href: '/hang-huy', label: 'Hàng hủy', icon: ShieldAlert, group: 'Kho & vận hành hàng hóa', permission: 'view_waste', allowedRoles: OPERATION_ROLES },
+  // KHO CỬA HÀNG
+  { href: '/kho-cua-hang', label: 'Tồn kho', icon: Package, group: 'Kho cửa hàng', permission: 'view_inventory', allowedRoles: OPERATION_ROLES },
+  { href: '/hang-huy', label: 'Hàng hủy / hư', icon: Trash2, group: 'Kho cửa hàng', permission: 'view_waste', allowedRoles: OPERATION_ROLES },
+  { href: '/hao-hut-vuot-dinh-muc', label: 'Hao hụt / định mức', icon: BarChart3, group: 'Kho cửa hàng', permission: 'view_standard_loss', allowedRoles: OPERATION_ROLES },
 
-  { href: '/hao-hut-vuot-dinh-muc', label: 'Hao hụt / Vượt định mức', icon: BarChart3, group: 'Thất thoát & định mức', permission: 'view_standard_loss', allowedRoles: OPERATION_ROLES },
-  { href: '/that-thoat-ton-kho', label: 'Thất thoát tồn kho', icon: ShieldAlert, group: 'Thất thoát & định mức', permission: 'view_stock_loss', allowedRoles: OPERATION_ROLES },
-  { href: '/dinh-muc-mon-ban', label: 'Định mức món bán', icon: ClipboardList, group: 'Thất thoát & định mức', permission: 'view_master_data', allowedRoles: FULL_FINANCE_ROLES },
+  // KHO BẾP TRUNG TÂM
+  { href: '/kho-bep-trung-tam', label: 'Nhập NCC', icon: FileInput, group: 'Kho bếp trung tâm', permission: 'view_btt_inventory', allowedRoles: OPERATION_ROLES },
+  { href: '/kho-bep-trung-tam', label: 'Tồn kho & hao hụt', icon: ChefHat, group: 'Kho bếp trung tâm', permission: 'view_btt_inventory', allowedRoles: OPERATION_ROLES },
+  { href: '/doi-chieu-btt-cua-hang', label: 'Xuất BTT → CH', icon: Scale, group: 'Kho bếp trung tâm', permission: 'view_transfer', allowedRoles: OPERATION_ROLES },
 
-  { href: '/cong-no', label: 'Công nợ', icon: DollarSign, group: 'Hệ thống', permission: 'view_debt', allowedRoles: FULL_FINANCE_ROLES },
-  { href: '/cai-dat-bot', label: 'Cài đặt & Bot báo cáo', icon: Bot, group: 'Hệ thống', permission: 'view_settings', allowedRoles: ['CEO', 'Admin'] },
-  { href: '/lich-su-chot-bao-cao', label: 'Lịch sử chốt báo cáo', icon: ClipboardList, group: 'Hệ thống', permission: 'view_close_history', allowedRoles: FULL_FINANCE_ROLES }
+  // TÀI CHÍNH
+  { href: '/tong-quan', label: 'Tổng quan', icon: BarChart3, group: 'Tài chính', permission: 'view_dashboard', allowedRoles: FULL_FINANCE_ROLES },
+  { href: '/dong-tien', label: 'Dòng tiền', icon: DollarSign, group: 'Tài chính', permission: 'view_cashflow', allowedRoles: OPERATION_ROLES },
+  { href: '/can-doi', label: 'Cân đối', icon: Scale, group: 'Tài chính', permission: 'view_balance', allowedRoles: FULL_FINANCE_ROLES },
+  { href: '/du-toan', label: 'Dự toán', icon: ClipboardList, group: 'Tài chính', permission: 'view_forecast', allowedRoles: FULL_FINANCE_ROLES },
+
+  // LƯƠNG & NHÂN SỰ
+  { href: '/luong-nhan-su/cham-cong', label: 'Chấm công', icon: CalendarDays, group: 'Lương & nhân sự', permission: 'view_dashboard', allowedRoles: FULL_FINANCE_ROLES },
+  { href: '/luong-nhan-su/tam-ung', label: 'Tạm ứng / thưởng phạt', icon: Wallet, group: 'Lương & nhân sự', permission: 'view_dashboard', allowedRoles: FULL_FINANCE_ROLES },
+  { href: '/luong-nhan-su/bang-luong', label: 'Bảng lương', icon: FileText, group: 'Lương & nhân sự', permission: 'view_dashboard', allowedRoles: FULL_FINANCE_ROLES },
+
+  // BÁO CÁO QUẢN TRỊ
+  { href: '/bao-cao/ngay', label: 'Báo cáo ngày', icon: FileText, group: 'Báo cáo quản trị', permission: 'view_dashboard', allowedRoles: OPERATION_ROLES },
+  { href: '/bao-cao/tuan', label: 'Báo cáo tuần', icon: CalendarDays, group: 'Báo cáo quản trị', permission: 'view_pnl', allowedRoles: FULL_FINANCE_ROLES },
+  { href: '/bao-cao/thang', label: 'Báo cáo tháng', icon: BarChart3, group: 'Báo cáo quản trị', permission: 'view_pnl', allowedRoles: FULL_FINANCE_ROLES },
+
+  // TÀI LIỆU
+  { href: '/tai-lieu/quy-trinh', label: 'Quy trình & Checklist', icon: BookOpen, group: 'Tài liệu', permission: 'view_dashboard', allowedRoles: OPERATION_ROLES },
+  { href: '/tai-lieu/tinh-huong', label: 'Tình huống phát sinh', icon: AlertTriangle, group: 'Tài liệu', permission: 'view_dashboard', allowedRoles: OPERATION_ROLES },
+  { href: '/tai-lieu/bieu-mau', label: 'Biểu mẫu & Báo cáo mẫu', icon: FileSpreadsheet, group: 'Tài liệu', permission: 'view_dashboard', allowedRoles: OPERATION_ROLES },
+
+  // HỆ THỐNG
+  { href: '/he-thong/nguoi-dung', label: 'Người dùng', icon: Users, group: 'Hệ thống', permission: 'view_settings', allowedRoles: ['CEO', 'Admin'] },
+  { href: '/he-thong/cua-hang', label: 'Cửa hàng', icon: Store, group: 'Hệ thống', permission: 'view_settings', allowedRoles: ['CEO', 'Admin'] },
+  { href: '/he-thong/phan-quyen', label: 'Phân quyền', icon: Lock, group: 'Hệ thống', permission: 'view_settings', allowedRoles: ['CEO', 'Admin'] },
 ];
 
 export const navigationGroups: NavigationGroup[] = [
-  'Tổng quan & xử lý',
-  'Báo cáo tài chính quản trị',
-  'Kho & vận hành hàng hóa',
-  'Thất thoát & định mức',
+  'Trang chủ',
+  'Doanh thu',
+  'Kho cửa hàng',
+  'Kho bếp trung tâm',
+  'Tài chính',
+  'Lương & nhân sự',
+  'Báo cáo quản trị',
+  'Tài liệu',
   'Hệ thống'
 ];
