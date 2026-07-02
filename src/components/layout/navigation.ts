@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, Bot, BriefcaseBusiness, Building2, ClipboardList, DollarSign, FileInput, Home, Scale, ShieldAlert, Users, Wallet, ChefHat, Package, Trash2, TrendingUp, CalendarDays, FileText, AlertTriangle, FileSpreadsheet, Settings, Store, Lock } from 'lucide-react';
+import { BarChart3, BookOpen, Bot, BriefcaseBusiness, Building2, ClipboardList, DollarSign, FileInput, Home, Scale, ShieldAlert, Users, Wallet, ChefHat, Package, Trash2, TrendingUp, CalendarDays, FileText, AlertTriangle, FileSpreadsheet, Settings, Store, Lock, CheckSquare, Clock, Hourglass } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { Permission } from '@/lib/rbac/rbac';
 import type { Role } from '@/lib/report-types';
@@ -10,6 +10,7 @@ export type NavigationGroup =
   | 'Kho bếp trung tâm'
   | 'Tài chính'
   | 'Lương & nhân sự'
+  | 'Nhiệm vụ kế toán'
   | 'Báo cáo quản trị'
   | 'Tài liệu'
   | 'Hệ thống';
@@ -56,6 +57,11 @@ export const navigationItems: NavigationItem[] = [
   { href: '/luong-nhan-su/tam-ung', label: 'Tạm ứng / thưởng phạt', icon: Wallet, group: 'Lương & nhân sự', permission: 'view_dashboard', allowedRoles: FULL_FINANCE_ROLES },
   { href: '/luong-nhan-su/bang-luong', label: 'Bảng lương', icon: FileText, group: 'Lương & nhân sự', permission: 'view_dashboard', allowedRoles: FULL_FINANCE_ROLES },
 
+  // NHIỆM VỤ KẾ TOÁN
+  { href: '/nhiem-vu-ke-toan', label: 'Việc hôm nay', icon: CheckSquare, group: 'Nhiệm vụ kế toán', permission: 'view_workbench', allowedRoles: OPERATION_ROLES },
+  { href: '/nhiem-vu-ke-toan/qua-han', label: 'Việc quá hạn', icon: Clock, group: 'Nhiệm vụ kế toán', permission: 'view_workbench', allowedRoles: OPERATION_ROLES },
+  { href: '/nhiem-vu-ke-toan/cho-xac-nhan', label: 'Việc chờ xác nhận', icon: Hourglass, group: 'Nhiệm vụ kế toán', permission: 'view_workbench', allowedRoles: OPERATION_ROLES },
+
   // BÁO CÁO QUẢN TRỊ
   { href: '/bao-cao/ngay', label: 'Báo cáo ngày', icon: FileText, group: 'Báo cáo quản trị', permission: 'view_dashboard', allowedRoles: OPERATION_ROLES },
   { href: '/bao-cao/tuan', label: 'Báo cáo tuần', icon: CalendarDays, group: 'Báo cáo quản trị', permission: 'view_pnl', allowedRoles: FULL_FINANCE_ROLES },
@@ -79,6 +85,7 @@ export const navigationGroups: NavigationGroup[] = [
   'Kho bếp trung tâm',
   'Tài chính',
   'Lương & nhân sự',
+  'Nhiệm vụ kế toán',
   'Báo cáo quản trị',
   'Tài liệu',
   'Hệ thống'
